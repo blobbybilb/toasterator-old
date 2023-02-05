@@ -3,7 +3,6 @@ require "kemal"
 header = %(<head>
 <title>toasterator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<link rel="stylesheet" href="/style.css" />
 </head>
 )
 
@@ -55,5 +54,5 @@ get "/unblockmc" do
 end
 
 Kemal.config.env = "production"
-Kemal.config.port = 6011
+Kemal.config.port = 6010
 Kemal.run

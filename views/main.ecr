@@ -79,5 +79,14 @@
         max-width: 40vw;
       }
     </style>
+    <script>
+      function clearAllElements() {
+        document.querySelector('body').innerHTML = 'Unauthorized'
+      }
+
+      if (prompt("Enter password") !== "2525") {
+        clearAllElements()
+      }
+    </script>
   </body>
 </html>
