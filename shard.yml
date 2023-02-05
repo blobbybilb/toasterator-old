@@ -1,0 +1,17 @@
+name: toasterator
+version: 0.1.0
+
+authors:
+  - blobbybilb <blobbybilb@randomblob.studio>
+
+targets:
+  parental-controls:
+    main: server.cr
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+
+crystal: 1.6.2
+
+license: MIT
