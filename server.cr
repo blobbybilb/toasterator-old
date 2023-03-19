@@ -1,21 +1,28 @@
 require "kemal"
 
-header = %(<head>
-<title>toasterator</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
+# Config
+toastlist = ["java", "osu!"]
+user = "<user>"
+
+header = %(
+  <head>
+  <title>toasterator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
 )
 
-blockmc = true
+toasted = true
+disabled = true
 
 spawn do
   loop do
-    if blockmc
-      Process.run("killall", ["java"])
-      sleep 5.seconds
-    else
-      sleep 5.seconds
+    if toasted
+      Process.run("killall", toasted)
     end
+    if disabled
+      Process.run("pkill", ["-u", user])
+    end
+    sleep 5.seconds
   end
 end
 
@@ -25,32 +32,62 @@ end
 
 get "/shutdown" do
   Process.run("shutdown", ["now"])
-  "Done"
+  message = "Shutdown Computer"
+  render "views/done.ecr"
 end
 
-get "/exitmc" do
+get "/exit" do
   Process.run("killall", ["java"])
-  "Done"
+  message = "Exit Toastlist"
+  render "views/done.ecr"
 end
 
 get "/logout" do
-  Process.run("pkill", ["-u", "ronan"])
-  "Done"
+  Process.run("pkill", ["-u", user])
+  message = "Logout User"
+  render "views/done.ecr"
 end
 
 get "/reboot" do
   Process.run("reboot")
-  "Done"
+  message = "Reboot Computer"
+  render "views/done.ecr"
 end
 
-get "/blockmc" do
-  blockmc = true
-  next "Done"
+get "/toast" do
+  toasted = true
+  message = "Toast Toastlist"
+  render "views/done.ecr"
 end
 
-get "/unblockmc" do
-  blockmc = false
-  "Done"
+get "/untoast" do
+  toasted = false
+  message = "Untoast Toastlist"
+  render "views/done.ecr"
+end
+
+get "/add/:processname" do
+  toastlist << params[:processname]
+  message = "Add #{params[:processname]} to Toastlist"
+  render "views/done.ecr"
+end
+
+get "/remove/:processname" do
+  toastlist.delete(params[:processname])
+  message = "Remov #{params[:processname]} from Toastlist"
+  render "views/done.ecr"
+end
+
+get "/disable" do
+  disabled = true
+  message = "Disabled User #{user}"
+  render "views/done.ecr"
+end
+
+get "/enable" do
+  disabled = false
+  message = "Enabled User #{user}"
+  render "views/done.ecr"
 end
 
 Kemal.config.env = "production"
