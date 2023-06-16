@@ -73,12 +73,14 @@ get "/add/:processname" do
 end
 
 get "/remove/:processname" do
+  params = env.params.url
   toastlist.delete(params[:processname])
   message = "Remov #{params[:processname]} from Toastlist"
   render "views/done.ecr"
 end
 
 get "/disable" do
+  params = env.params.url
   disabled = true
   message = "Disabled User #{user}"
   render "views/done.ecr"
