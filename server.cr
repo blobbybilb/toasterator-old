@@ -17,7 +17,7 @@ disabled = true
 spawn do
   loop do
     if toasted
-      Process.run("killall", toasted)
+      Process.run("killall", toastlist)
     end
     if disabled
       Process.run("pkill", ["-u", user])
