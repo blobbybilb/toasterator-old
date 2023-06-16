@@ -66,20 +66,22 @@ get "/untoast" do
   render "views/done.ecr"
 end
 
-get "/add/:processname" do
+get "/add/:processname" do |env|
+  params = env.params.url
+
   toastlist << params[:processname]
   message = "Add #{params[:processname]} to Toastlist"
   render "views/done.ecr"
 end
 
-get "/remove/:processname" do
+get "/remove/:processname" do |env|
   params = env.params.url
   toastlist.delete(params[:processname])
   message = "Remov #{params[:processname]} from Toastlist"
   render "views/done.ecr"
 end
 
-get "/disable" do
+get "/disable" do |env|
   params = env.params.url
   disabled = true
   message = "Disabled User #{user}"
