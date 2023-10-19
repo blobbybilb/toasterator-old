@@ -1,5 +1,5 @@
 import { exit } from "process"
-import server from "./server"
+import { runServer } from "./server"
 import { config } from "./storage"
 
 const cmd = Bun.argv[2]
@@ -10,7 +10,7 @@ if (cmd === "server") {
     exit(1)
   }
 
-  Bun.serve(server)
+  runServer(8080)
 } else if (cmd === "config") {
   let [user, pass] = [prompt("Enter username: "), prompt("Enter password: ")]
 

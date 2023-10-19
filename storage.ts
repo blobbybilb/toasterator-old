@@ -1,6 +1,6 @@
-import { DBInterface, item } from "./db"
+import { DBInterface, Item } from "./db"
 
-interface Passwords extends item {
+interface Passwords extends Item {
   name: string;
   user: string;
   pass: string;
