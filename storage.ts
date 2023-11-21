@@ -1,4 +1,4 @@
-import { DBInterface, Item } from "./db"
+import { DBInterface, Item } from "./f4/db";
 
 interface Passwords extends Item {
   name: string;
@@ -6,11 +6,7 @@ interface Passwords extends Item {
   pass: string;
 }
 
-const db = new DBInterface("data.sqlite")
-const config = db.openTable<Passwords>("config")
+const db = new DBInterface("data.sqlite");
+const config = db.openTable<Passwords>("config");
 
-export {
-  Passwords,
-  db,
-  config,
-}
+export { Passwords, db, config };
