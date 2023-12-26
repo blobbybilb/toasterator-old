@@ -35,7 +35,7 @@ const loginPage = (path: string) =>
 
 export class Server {
   h = new Hono()
-  fetch = this.h.fetch
+  fetch = this.h.fetch as any
 
   constructor(staticDir = 'static') {
     this.h.get('/logout', (c) => {
@@ -123,7 +123,7 @@ export class Server {
             url: new URL(c.req.url),
             path: c.req.path.split('/').filter((e) => e !== ''),
             getParams: Object.fromEntries(Object.entries(c.req.query())),
-            postParams: Object.fromEntries(Object.entries(await c.req.parseBody())),
+            postParams: Object.fromEntries(Object.entries(await c.req.parseBody())) as any,
             login: login,
           }),
         )

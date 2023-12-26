@@ -16,4 +16,4 @@ server.addRoutes({
     - `server.auth('/admin', [{ user: 'username', pass: 'password' }]) // specify a single user`
     - `server.auth('/app', usersDB.get({})) // get all users from DB`
 - DB interface that uses TypeScript object types to automatically manage SQLite, no SQL or manual schema definition needed
-- Frontend UI helpers based on Boostrap
+- Frontend UI helpers based on Boostrap - WIP
