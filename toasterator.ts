@@ -13,6 +13,11 @@ import { Page, Heading, Text, Space, Button, Form, Submit, Style, Input } from '
 
 const server = new Server()
 
+if (Bun.argv.length < 4) {
+  console.error('Usage: toasterator <username> <password>')
+  process.exit(1)
+}
+
 let isToasted = true
 let isUserDisabled = true
 const toastlist = ['java']
@@ -64,7 +69,7 @@ const mainPage = Page(
 
 const donePage = Page('Toasterator', [Heading('Done - 🍞🔥'), Space(), Button('Back', '/')], 'flatly')
 
-server.auth('/do', [{ user: 'blob', pass: 'blob' }])
+server.auth('/do', [{ user: Bun.argv[2], pass: Bun.argv[3] }])
 
 server.addRoutes({
   '/': mainPage,
@@ -88,4 +93,4 @@ server.addRoutes({
   },
 })
 
-Bun.serve({ fetch: server.fetch, port: 8080 })
+Bun.serve({ fetch: server.fetch, port: 6010})
