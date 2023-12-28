@@ -1,0 +1,4 @@
+
+Table: config
+name, user, pass
+webui, temp, temp

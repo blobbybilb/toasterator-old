@@ -1,37 +1,91 @@
-import { exit } from "process";
-import { runServer } from "./server";
-import { config } from "./storage";
+import { exec } from 'child_process'
+import { Server } from '@blobbybilb/f4/server'
+import { Page, Heading, Text, Space, Button, Form, Submit, Style, Input } from '@blobbybilb/f4/ui'
+// import { DBInterface, Item } from '@blobbybilb/f4/db'
 
-const cmd = Bun.argv[2];
+// interface TimeTrackingData extends Item {
+//   date: string
+//   process: string
+//   minutes: number
+// }
 
-if (cmd === "server") {
-  if (!config.tableExists) {
-    console.error(
-      "No config found. Run 'toasterator config' to set up a username and password.",
-    );
-    exit(1);
-  }
+// const timeTrackingDB = new DBInterface('data.sqlite').openTable<TimeTrackingData>('timetracking')
 
-  runServer(8080);
-} else if (cmd === "config") {
-  let [user, pass] = [prompt("Enter username: "), prompt("Enter password: ")];
+const server = new Server()
 
-  if (user === null || pass === null) {
-    console.error("Enter a username and password.");
-    exit(1);
-  }
+let isToasted = true
+let isUserDisabled = true
+const toastlist = ['java']
+// const dailyTimeLimit = 30
+const user = 'rblob'
 
-  config.createTable({
-    name: "webui",
-    user: user.trim(),
-    pass: pass.trim(),
-  });
-  config.del({ name: "webui" });
-  config.add({ name: "webui", user: user.trim(), pass: pass.trim() });
-
-  console.log(
-    `Username and password set. (User: '${user.trim()}', Pass: '${pass.trim()}')`,
-  );
-} else {
-  console.log("Unknown command.");
+const commands = {
+  exit: () => exec('killall java'),
+  toast: () => (isToasted = true),
+  untoast: () => (isToasted = false),
+  disable: () => (isUserDisabled = true),
+  enable: () => (isUserDisabled = false),
 }
+
+let secondsTillAutoToast = 0
+
+setInterval(() => {
+  if (isToasted || secondsTillAutoToast <= 0) exec('killall ' + toastlist.join(' '))
+  if (isUserDisabled) exec('pkill -u ' + user)
+
+  if (secondsTillAutoToast > 0) secondsTillAutoToast -= 30
+}, 30000)
+
+const mainPage = Page(
+  'Toasterator',
+  [
+    Heading('🍞🔥'),
+    Space(),
+    Button('Log in', '/login/do'),
+    Space(3),
+    Button('Toast', '/do/toast'),
+    Space(2),
+    Button('Untoast', '/do/untoast'),
+    Space(2),
+    Button('Exit', '/do/exit'),
+    Space(2),
+    Button('Disable', '/do/disable'),
+    Space(2),
+    Button('Enable', '/do/enable'),
+    Space(3),
+    Form(
+      '/do/untoastfor',
+      [Input('minutes', { type: 'number', placeholder: 'Time (mins)' }), Space(2), Submit('Temporary Untoast')],
+      'GET',
+    ),
+  ],
+  'flatly',
+)
+
+const donePage = Page('Toasterator', [Heading('Done - 🍞🔥'), Space(), Button('Back', '/')], 'flatly')
+
+server.auth('/do', [{ user: 'blob', pass: 'blob' }])
+
+server.addRoutes({
+  '/': mainPage,
+  '/do/untoastfor': (c) => {
+    const minutesParam = c.getParams['minutes']
+    if (!minutesParam) return 'Error - no minutes specified'
+
+    const minutes = parseInt(minutesParam)
+    if (isNaN(minutes)) return `Error: ${minutesParam} is not a valid amount of minutes`
+
+    secondsTillAutoToast = minutes * 60
+
+    return donePage
+  },
+  '/do/*': (c) => {
+    const command = c.path[1]
+    if (!Object.keys(commands).includes(command)) return 'Error'
+    else (commands as any)[command]()
+
+    return donePage
+  },
+})
+
+Bun.serve({ fetch: server.fetch, port: 8080 })
