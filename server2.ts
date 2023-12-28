@@ -1,6 +1,6 @@
 import { exec } from 'child_process'
-import { Server } from './f4/server'
-import { Page, Heading, Text, Space, Button } from './f4/ui'
+import { Server } from '@blobbybilb/f4/server'
+import { Page, Heading, Text, Space, Button } from '@blobbybilb/f4/ui'
 
 const server = new Server()
 
