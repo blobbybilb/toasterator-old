@@ -80,6 +80,7 @@ server.addRoutes({
     const minutes = parseInt(minutesParam)
     if (isNaN(minutes)) return `Error: ${minutesParam} is not a valid amount of minutes`
 
+    isToasted = false
     secondsTillAutoToast = minutes * 60
 
     return donePage
