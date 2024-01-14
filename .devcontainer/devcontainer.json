@@ -1,4 +1,4 @@
 {
   "image": "oven/bun:debian",
-  "postCreateCommand": "bun install",
+  "postCreateCommand": "apt update && apt install -y procps && bun install",
 }
