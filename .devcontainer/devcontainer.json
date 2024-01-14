@@ -1,4 +1,4 @@
 {
-  "image": "oven/bun",
+  "image": "oven/bun:alpine",
   "postCreateCommand": "bun install",
 }
