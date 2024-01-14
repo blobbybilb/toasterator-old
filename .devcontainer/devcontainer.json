@@ -1,4 +1,3 @@
 {
-  "image": "oven/bun:debian",
-  "postCreateCommand": "apt update && apt install -y procps && bun install",
+  "image": "mcr.microsoft.com/devcontainers/base:alpine"
 }
